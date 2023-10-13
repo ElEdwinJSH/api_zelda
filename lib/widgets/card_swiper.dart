@@ -1,5 +1,8 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+//import 'package:audioplayers/audioplayers.dart';
+import 'package:soundpool/soundpool.dart';
 
 class CardSwiper extends StatefulWidget {
   const CardSwiper({super.key});
@@ -9,19 +12,24 @@ class CardSwiper extends StatefulWidget {
 }
 
 class _CardSwiperState extends State<CardSwiper> {
+  // String soundFilePath = "assets/flechas_sonido.wav";
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Center(
       child: Container(
-        margin: EdgeInsets.only(top: 20.0),
+        margin: const EdgeInsets.only(top: 20.0),
         child: SizedBox(
           width: size.width * 0.95,
           height: size.height * 0.83,
           child: Swiper(
             itemBuilder: (BuildContext context, int index) {
-              return new Image.network('http://via.placeholder.com/350x150',
+              return Image.network('http://via.placeholder.com/350x150',
                   fit: BoxFit.fill);
+            },
+            onIndexChanged: (index) {
+              _playSound();
             },
             itemCount: 5,
             itemHeight: size.height * 0.4,
@@ -37,5 +45,15 @@ class _CardSwiperState extends State<CardSwiper> {
         ),
       ),
     );
+  }
+
+  Future<void> _playSound() async {
+    Soundpool pool = Soundpool(streamType: StreamType.notification);
+    int soundId = await rootBundle
+        .load("assets/flechas_sonido.wav")
+        .then((ByteData soundData) {
+      return pool.load(soundData);
+    });
+    int streamId = await pool.play(soundId);
   }
 }
