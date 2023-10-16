@@ -24,13 +24,22 @@ class _CardSwiperState extends State<CardSwiper> {
           width: size.width * 0.95,
           height: size.height * 0.83,
           child: Swiper(
-            itemBuilder: (BuildContext context, int index) {
-              return Image.network('http://via.placeholder.com/350x150',
-                  fit: BoxFit.fill);
-            },
             onIndexChanged: (index) {
               _playSound();
             },
+            itemBuilder: (_, int index) {
+              return GestureDetector(
+                onTap: () =>
+                    Navigator.pushNamed(context, 'details', arguments: ''),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: const FadeInImage(
+                    placeholder: AssetImage('assets/no-image.jpg'),
+                    image: AssetImage('assets/no-image.jpg'),
+                  ),
+                ),
+              ); //saber que se hace con el tactil con el dedo
+            }, //ide
             itemCount: 5,
             itemHeight: size.height * 0.4,
             itemWidth: size.width * 0.5,

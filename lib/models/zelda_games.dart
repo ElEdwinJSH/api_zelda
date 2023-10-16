@@ -1,25 +1,26 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-class Welcome {
+class AllGames {
   bool success;
   int count;
-  List<Datum> data;
+  List<Games> data;
 
-  Welcome({
+  AllGames({
     required this.success,
     required this.count,
     required this.data,
   });
 
-  factory Welcome.fromRawJson(String str) => Welcome.fromJson(json.decode(str));
+  factory AllGames.fromRawJson(String str) =>
+      AllGames.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Welcome.fromJson(Map<String, dynamic> json) => Welcome(
+  factory AllGames.fromJson(Map<String, dynamic> json) => AllGames(
         success: json["success"],
         count: json["count"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<Games>.from(json["data"].map((x) => Games.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,7 +30,7 @@ class Welcome {
       };
 }
 
-class Datum {
+class Games {
   String name;
   String description;
   String developer;
@@ -37,7 +38,7 @@ class Datum {
   String releasedDate;
   String id;
 
-  Datum({
+  Games({
     required this.name,
     required this.description,
     required this.developer,
@@ -46,11 +47,11 @@ class Datum {
     required this.id,
   });
 
-  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+  factory Games.fromRawJson(String str) => Games.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Games.fromJson(Map<String, dynamic> json) => Games(
         name: json["name"],
         description: json["description"],
         developer: json["developer"],
