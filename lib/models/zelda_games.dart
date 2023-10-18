@@ -47,6 +47,13 @@ class Games {
     required this.id,
   });
 
+  get gameImage {
+    if (id != null) {
+      return 'assets/$id.png';
+    }
+    return 'assets/The Legend of Zelda.png';
+  }
+
   factory Games.fromRawJson(String str) => Games.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());

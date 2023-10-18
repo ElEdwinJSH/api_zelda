@@ -17,7 +17,7 @@ class GamesProvider extends ChangeNotifier {
   getallGames() async {
     var url = Uri.https(
       _baseUrl,
-      'zelda.fanapis.com/api/games',
+      'api/games',
     );
     final response = await http.get(
         url); //aqui espera a recibir informacion por eso await, y hacemos un get

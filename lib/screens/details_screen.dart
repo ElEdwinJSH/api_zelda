@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:api_zelda/models/zelda_games.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Games game = ModalRoute.of(context)?.settings.arguments as Games;
     return Scaffold(
       appBar: AppBar(title: Text('')),
       body: Center(
@@ -12,14 +14,18 @@ class DetailsScreen extends StatelessWidget {
           children: <Widget>[
             Container(
                 alignment: Alignment.center,
-                child: const Opacity(
+                child: Opacity(
                   opacity: 0.5,
                   child: FadeInImage(
                     placeholder: AssetImage('assets/no-image.jpg'),
-                    image: AssetImage('assets/no-image.jpg'),
+                    image: NetworkImage(game.gameImage),
                   ),
                 )),
-            Container(alignment: Alignment.center, child: _Texto()
+            Container(
+                alignment: Alignment.center,
+                child: _Texto(
+                  games: game,
+                )
                 /*const Text(
                   'Show text here',
                   style: TextStyle(
@@ -36,6 +42,9 @@ class DetailsScreen extends StatelessWidget {
 }
 
 class _Texto extends StatelessWidget {
+  final Games games;
+
+  const _Texto({super.key, required this.games});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,8 +59,8 @@ class _Texto extends StatelessWidget {
           color: Colors.grey.withOpacity(0.7)
           // Bordes redondeados
           ),
-      child: const Text(
-        'Texto con Marco Decorativo',
+      child: Text(
+        games.description,
         style: TextStyle(fontSize: 18.0),
       ),
     );
