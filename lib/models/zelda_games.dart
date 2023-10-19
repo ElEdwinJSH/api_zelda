@@ -54,6 +54,20 @@ class Games {
     return 'assets/The Legend of Zelda.png';
   }
 
+  get gameMusic {
+    if (id != null) {
+      return '$id.mp3';
+    }
+    return '$id.mp3';
+  }
+
+  get dinamicName {
+    if (name != null) {
+      return '${name}';
+    }
+    return '';
+  }
+
   factory Games.fromRawJson(String str) => Games.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());

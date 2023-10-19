@@ -12,13 +12,19 @@ class CardSwiper extends StatelessWidget {
   // String soundFilePath = "assets/flechas_sonido.wav";
   @override
   Widget build(BuildContext context) {
+    /*   int count = 0;
+    int lastPlayedIndex = -1;
+    int currentIndex = 0;
+    int indexChangeCount = 0;
+*/
     final size = MediaQuery.of(context).size;
-    // final Games gamess = ModalRoute.of(context)?.settings.arguments as Games;
+    //   final Games gamess = ModalRoute.of(context)?.settings.arguments as Games;
     return Center(
       child: Column(children: [
         SizedBox(height: 16.0),
+        //_Titulo(game: games[context]),
         /* _Titulo(
-          game: gamess,
+          game: games.ge,
         ),*/
         SizedBox(height: 16.0),
         Container(
@@ -29,22 +35,41 @@ class CardSwiper extends StatelessWidget {
             child: Swiper(
               itemBuilder: (_, int index) {
                 final game = games[index];
+
+                // count = games.length + 1;
                 return GestureDetector(
                   onTap: () =>
                       Navigator.pushNamed(context, 'details', arguments: game),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: FadeInImage(
-                      placeholder: AssetImage('assets/no-image.jpg'),
+                    child: Image(
+//                      placeholder: AssetImage(game.gameImage),
                       image: AssetImage(game.gameImage),
                       fit: BoxFit.fill,
                     ),
                   ),
                 ); //saber que se hace con el tactil con el dedo
               },
-              onIndexChanged: (index) {
-                _playSound();
-              }, //ide
+              /* onIndexChanged: (index) {
+                if (index != lastPlayedIndex) {
+                  // Verifica si el índice ha cambiado
+                  _playSound();
+                  lastPlayedIndex =
+                      index; // Actualiza el último índice reproducido
+                }
+              },*/ //ide
+              /*  onIndexChanged: (index) {
+                currentIndex = index; // Actualiza el índice actual
+                print("Current Index: $currentIndex");
+                // Verifica si se han realizado 15 cambios de índice y reproduce el sonido
+                if (indexChangeCount < 25) {
+                  indexChangeCount++;
+                } else {
+                  print("Current change: $indexChangeCount");
+                  indexChangeCount++;
+                  _playSound(indexChangeCount);
+                }
+              },*/
               itemCount: games.length,
               itemHeight: size.height * 0.4,
               itemWidth: size.width * 0.5,
@@ -62,14 +87,20 @@ class CardSwiper extends StatelessWidget {
     );
   }
 
-  Future<void> _playSound() async {
-    Soundpool pool = Soundpool(streamType: StreamType.notification);
-    int soundId = await rootBundle
-        .load("assets/flechas_sonido.wav")
-        .then((ByteData soundData) {
-      return pool.load(soundData);
-    });
-    int streamId = await pool.play(soundId);
+  Future<void> _playSound(int indexChangeCount) async {
+    // Puedes acceder a indexChangeCount aquí y usarlo según sea necesario.
+    if (indexChangeCount > 9) {
+      Soundpool pool = Soundpool(streamType: StreamType.notification);
+      int soundId = await rootBundle
+          .load("assets/flechas_sonido.wav")
+          .then((ByteData soundData) {
+        return pool.load(soundData);
+      });
+      pool.play(soundId);
+      // Realiza acciones específicas si indexChangeCount es menor que 9.
+    } else {
+      // Realiza acciones específicas si indexChangeCount es 9 o más.
+    }
   }
 }
 

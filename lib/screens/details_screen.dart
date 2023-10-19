@@ -1,43 +1,88 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/models/zelda_games.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
 
   @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  AudioPlayer player = AudioPlayer();
+
+  bool isTextVisible = true;
+  void toggleTextVisibility() {
+    setState(() {
+      isTextVisible = !isTextVisible;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final Games game = ModalRoute.of(context)?.settings.arguments as Games;
+
+    @override
+    void initState() {
+      super.initState();
+      playm(_Musica(
+        game: game,
+      ) as String);
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text('')),
+      backgroundColor: Colors.grey.shade900,
+      appBar: AppBar(
+          backgroundColor: Colors.green.shade800,
+          title: Text(
+            game.name,
+            style: TextStyle(fontSize: 15),
+          )),
       body: Center(
         child: Stack(
           children: <Widget>[
-            Container(
+            GestureDetector(
+              onTap: () {
+                if (!isTextVisible) {
+                  toggleTextVisibility();
+                }
+              },
+              child: Container(
+                width: size.width,
+                height: size.height,
                 alignment: Alignment.center,
                 child: Opacity(
-                  opacity: 0.5,
-                  child: FadeInImage(
-                    placeholder: AssetImage('assets/no-image.jpg'),
-                    image: NetworkImage(game.gameImage),
+                  opacity: isTextVisible ? 0.5 : 1.0,
+                  child: Image(
+                    image: AssetImage(game.gameImage),
+                    fit: BoxFit.fill,
                   ),
-                )),
-            Container(
-                alignment: Alignment.center,
-                child: _Texto(
-                  games: game,
-                )
-                /*const Text(
-                  'Show text here',
-                  style: TextStyle(
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22.0),
-                )*/
                 ),
+              ),
+            ),
+            if (isTextVisible)
+              GestureDetector(
+                onTap: toggleTextVisibility, // Toggle the text visibility
+                child: Center(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _Texto(
+                          games: game,
+                        ),
+                      ]),
+                ),
+              ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> playm(String path) async {
+    await player.play(AssetSource(path));
   }
 }
 
@@ -56,13 +101,47 @@ class _Texto extends StatelessWidget {
             width: 2.0, // Ancho del borde
           ),
           borderRadius: BorderRadius.circular(12.0),
-          color: Colors.grey.withOpacity(0.7)
+          color: Colors.grey.withOpacity(0.85)
           // Bordes redondeados
           ),
-      child: Text(
-        games.description,
-        style: TextStyle(fontSize: 18.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Descripción:',
+              style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.blue.shade900,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              games.description,
+              style: const TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Presiona para ocultar',
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.red.shade900,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class _Musica extends StatelessWidget {
+  final Games game;
+  const _Musica({super.key, required this.game});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(game.gameMusic);
   }
 }
