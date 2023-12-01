@@ -1,14 +1,32 @@
 import 'package:api_zelda/models/zelda_games.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:soundpool/soundpool.dart';
 
-class CardSwiper extends StatelessWidget {
+class CardSwiper extends StatefulWidget {
   final List<Games> games;
   const CardSwiper({super.key, required this.games});
 
+  @override
+  State<CardSwiper> createState() => _CardSwiperState();
+}
+
+class _CardSwiperState extends State<CardSwiper> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    playm('Menu.mp3');
+  }
+
+ 
+
+  AudioPlayer player = AudioPlayer();
+bool isMusicPlaying = true;
   // String soundFilePath = "assets/flechas_sonido.wav";
   @override
   Widget build(BuildContext context) {
@@ -34,12 +52,22 @@ class CardSwiper extends StatelessWidget {
             height: size.height * 0.78,
             child: Swiper(
               itemBuilder: (_, int index) {
-                final game = games[index];
+                final game = widget.games[index];
 
                 // count = games.length + 1;
                 return GestureDetector(
-                  onTap: () =>
-                      Navigator.pushNamed(context, 'details', arguments: game),
+                  onTap: () {//pausa la musica al tocar la tarjeta
+                    if(isMusicPlaying=true){
+                      player.stop();//si hay musica, se va a detener
+                    }else{
+                      playm('Menu.mp3');
+                    }
+                    setState(() {
+                      isMusicPlaying = !isMusicPlaying;//cambia el estado de musica
+                    });
+                      Navigator.pushNamed(context, 'details', arguments: game).then((_) {
+      // This code runs when the details screen is closed
+      playm('Menu.mp3');});},
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(
@@ -70,7 +98,7 @@ class CardSwiper extends StatelessWidget {
                   _playSound(indexChangeCount);
                 }
               },*/
-              itemCount: games.length,
+              itemCount: widget.games.length,
               itemHeight: size.height * 0.4,
               itemWidth: size.width * 0.5,
               control: const SwiperControl(
@@ -102,6 +130,9 @@ class CardSwiper extends StatelessWidget {
       // Realiza acciones específicas si indexChangeCount es 9 o más.
     }
   }
+    Future<void> playm(String path) async {
+    await player.play(AssetSource(path));
+  }
 }
 
 class _Titulo extends StatelessWidget {
@@ -116,3 +147,5 @@ class _Titulo extends StatelessWidget {
     );
   }
 }
+
+

@@ -20,17 +20,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   @override
+  void dispose() {
+    // Detener la reproducción cuando el widget se dispose (se cierre)
+    player.stop();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final Games game = ModalRoute.of(context)?.settings.arguments as Games;
 
-    @override
-    void initState() {
-      super.initState();
-      playm(_Musica(
-        game: game,
-      ) as String);
-    }
+
+
+     playm(game.id+'.mp3');
+
 
     return Scaffold(
       backgroundColor: Colors.grey.shade900,
@@ -44,11 +47,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
         child: Stack(
           children: <Widget>[
             GestureDetector(
+              
               onTap: () {
                 if (!isTextVisible) {
                   toggleTextVisibility();
                 }
               },
+              
+              
               child: Container(
                 width: size.width,
                 height: size.height,
@@ -145,3 +151,4 @@ class _Musica extends StatelessWidget {
     return Text(game.gameMusic);
   }
 }
+

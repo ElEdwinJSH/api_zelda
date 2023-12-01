@@ -16,11 +16,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AudioPlayer player = AudioPlayer();
 
-  @override
-  void initState() {
-    super.initState();
-    playm('Menu.mp3');
-  }
 
   @override
   Widget build(BuildContext context) {
