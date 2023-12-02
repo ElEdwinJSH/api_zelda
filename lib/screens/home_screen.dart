@@ -2,8 +2,8 @@ import 'package:api_zelda/widgets/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/providers/games_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:soundpool/soundpool.dart';
-import 'package:flutter/services.dart';
+//import 'package:soundpool/soundpool.dart';
+//import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class HomeScreen extends StatefulWidget {

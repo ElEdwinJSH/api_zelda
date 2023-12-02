@@ -40,7 +40,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       appBar: AppBar(
           backgroundColor: Colors.green.shade800,
           title: Text(
-            game.name,
+          (game.id == '5f6ce9d805615a85623ec2ce') ? 'The Legend of Zelda Tears of the Kingdom' : game.name,
             style: TextStyle(fontSize: 15),
           )),
       body: Center(
@@ -123,7 +123,10 @@ class _Texto extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              games.description,
+              (games.id == '5f6ce9d805615a85623ec2ce') ? 'Tears of the Kingdom retains the open-world action-adventure gameplay of Breath of the Wild (2017). As Link, players explore Hyrule and two new areas; the sky, which is littered with numerous floating islands, and the Depths, a vast underground area beneath Hyrule, to find weapons and resources and complete quests.' :  games.description,
+
+
+            
               style: const TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 10),

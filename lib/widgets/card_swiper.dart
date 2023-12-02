@@ -141,10 +141,15 @@ class _Titulo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+if(game.id == '5f6ce9d805615a85623ec2ce'){
+  return Text('The Legend of Zelda Tears of the Kingdom');
+}else{return Text(
       game.name, overflow: TextOverflow.visible, //------------------
       style: TextStyle(fontSize: 25),
-    );
+    );}
+
+
+    
   }
 }
 
