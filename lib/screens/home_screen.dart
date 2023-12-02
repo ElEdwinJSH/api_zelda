@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 //import 'package:flutter/services.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+import '../services/services.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -19,13 +21,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context, listen: false);
     final gamesProvider = Provider.of<GamesProvider>(context);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.green.shade700,
           title: Center(
             child: Text('Zelda API'),
-          )),
+          ),
+            leading: IconButton(
+          icon: const Icon(Icons.login_outlined),
+          onPressed: () {
+            authService.logout();
+            Navigator.pushReplacementNamed(context, 'login');
+          },
+        ),),
       body: Column(children: [CardSwiper(games: gamesProvider.onDisplayGames)]),
       backgroundColor: Colors.grey.shade900,
     );

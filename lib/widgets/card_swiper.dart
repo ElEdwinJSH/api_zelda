@@ -23,7 +23,11 @@ class _CardSwiperState extends State<CardSwiper> {
     playm('Menu.mp3');
   }
 
- 
+  @override
+  void dispose() {
+     player.stop();// Llamas a la función que detiene la música al cerrar la pantalla
+    super.dispose();
+  }
 
   AudioPlayer player = AudioPlayer();
 bool isMusicPlaying = true;

@@ -1,7 +1,10 @@
 import 'package:api_zelda/providers/games_provider.dart';
+import 'package:api_zelda/screens/check_auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/screens/screens.dart';
 import 'package:provider/provider.dart';
+
+import 'services/services.dart';
 
 void main() => runApp(const AppState());
 
@@ -15,6 +18,12 @@ class AppState extends StatelessWidget {
         ChangeNotifierProvider(
           //AVISA QUE HAY CAMBI ASI QUE SE ACTUALIZA,
           create: (_) => GamesProvider(),
+          lazy:
+              false, //normalmetne es perezoso pero aqui hacemos que no sea asi e inicie al inicar la aplicacion
+        ),
+         ChangeNotifierProvider(
+          //AVISA QUE HAY CAMBI ASI QUE SE ACTUALIZA,
+          create: (_) => AuthService(),
           lazy:
               false, //normalmetne es perezoso pero aqui hacemos que no sea asi e inicie al inicar la aplicacion
         )
@@ -32,10 +41,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Api Zelda',
-      initialRoute: 'home',
+      initialRoute: 'login',
       routes: {
         'home': (_) => HomeScreen(),
         'details': (_) => DetailsScreen(),
+        'login': (_) => LoginScreen(),
+        'register': (_) => RegistroScreen(),
+        'checking': (_) => CheckAuthScreen()
       },
     );
   }
