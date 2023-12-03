@@ -21,12 +21,27 @@ class _CardSwiperState extends State<CardSwiper> {
   void initState() {
     super.initState();
     playm('Menu.mp3');
+    
   }
 
   @override
   void dispose() {
-     player.stop();// Llamas a la función que detiene la música al cerrar la pantalla
+     fadeOutAndStopMusic();// Llamas a la función que detiene la música al cerrar la pantalla
     super.dispose();
+  }
+
+   void fadeOutAndStopMusic() async {
+    const fadeDuration = Duration(milliseconds: 500); // Puedes ajustar la duración del fade out según tus preferencias
+    const fadeSteps = 10;
+    const initialVolume = 1.0;
+
+    for (int i = 0; i < fadeSteps; i++) {
+      double volume = initialVolume - (i / fadeSteps);
+      await player.setVolume(volume);
+      await Future.delayed(fadeDuration ~/ fadeSteps);
+    }
+
+    player.stop(); // Detiene la reproducción después del fade out
   }
 
   AudioPlayer player = AudioPlayer();
@@ -62,16 +77,18 @@ bool isMusicPlaying = true;
                 return GestureDetector(
                   onTap: () {//pausa la musica al tocar la tarjeta
                     if(isMusicPlaying=true){
-                      player.stop();//si hay musica, se va a detener
+                      fadeOutAndStopMusic();//si hay musica, se va a detener
                     }else{
                       playm('Menu.mp3');
+                      player.setVolume(1.0);
                     }
                     setState(() {
                       isMusicPlaying = !isMusicPlaying;//cambia el estado de musica
                     });
                       Navigator.pushNamed(context, 'details', arguments: game).then((_) {
       // This code runs when the details screen is closed
-      playm('Menu.mp3');});},
+      playm('Menu.mp3');
+       player.setVolume(1.0);});},
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image(

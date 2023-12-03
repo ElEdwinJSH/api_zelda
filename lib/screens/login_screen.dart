@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/providers/login_form_provider.dart';
@@ -6,8 +7,63 @@ import 'package:api_zelda/services/auth_services.dart';
 import 'package:api_zelda/services/notifications_services.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+
+ static bool isMusicPlayed = false; 
+ late String routeName;
+
+  @override
+  void initState() {
+    super.initState();
+if(!isMusicPlayed){
+  
+    playm('File_Select.mp3');
+    isMusicPlayed = true;
+}
+
+
+ 
+  }
+
+  @override
+  void dispose() {
+ 
+      routeName = ModalRoute.of(context)?.settings.name ?? '';
+   if (routeName == 'register') {
+    // No hagas nada si la ruta es "register"
+  }
+
+    fadeOutAndStopMusic();
+  
+ 
+  
+  // Llamas a la función que detiene la música al cerrar la pantalla
+    super.dispose();
+  }
+
+   void fadeOutAndStopMusic() async {
+    const fadeDuration = Duration(milliseconds: 500); // Puedes ajustar la duración del fade out según tus preferencias
+    const fadeSteps = 10;
+    const initialVolume = 1.0;
+
+    for (int i = 0; i < fadeSteps; i++) {
+      double volume = initialVolume - (i / fadeSteps);
+      await player.setVolume(volume);
+      await Future.delayed(fadeDuration ~/ fadeSteps);
+    }
+
+    player.stop(); // Detiene la reproducción después del fade out
+  }
+
+ 
+ AudioPlayer player = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +74,23 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-
-
+    Future<void> playm(String path) async {
+    await player.play(AssetSource(path));
+  }
 }
 
+ 
 
-class _Login extends StatelessWidget {
+class _Login extends StatefulWidget {
+  
   const _Login({super.key});
 
+  @override
+  State<_Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<_Login> {
+ 
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
@@ -90,7 +155,9 @@ class _Login extends StatelessWidget {
                             loginForm.email, loginForm.password);
 
                         if (errorMessage == null) {
+                      
                           Navigator.pushReplacementNamed(context, 'home');
+                             
                         } else {
                           // TODO: mostrar error en pantalla
                           // print( errorMessage );

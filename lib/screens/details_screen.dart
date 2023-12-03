@@ -19,11 +19,24 @@ class _DetailsScreenState extends State<DetailsScreen> {
     });
   }
 
-  @override
+ @override
   void dispose() {
-    // Detener la reproducción cuando el widget se dispose (se cierre)
-    player.stop();
+     fadeOutAndStopMusic();// Llamas a la función que detiene la música al cerrar la pantalla
     super.dispose();
+  }
+
+   void fadeOutAndStopMusic() async {
+    const fadeDuration = Duration(milliseconds: 500); // Puedes ajustar la duración del fade out según tus preferencias
+    const fadeSteps = 10;
+    const initialVolume = 1.0;
+
+    for (int i = 0; i < fadeSteps; i++) {
+      double volume = initialVolume - (i / fadeSteps);
+      await player.setVolume(volume);
+      await Future.delayed(fadeDuration ~/ fadeSteps);
+    }
+
+    player.stop(); // Detiene la reproducción después del fade out
   }
   @override
   Widget build(BuildContext context) {

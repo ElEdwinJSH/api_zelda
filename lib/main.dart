@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         'details': (_) => DetailsScreen(),
         'login': (_) => LoginScreen(),
         'register': (_) => RegistroScreen(),
-        'checking': (_) => CheckAuthScreen()
+        'checking': (_) => CheckAuthScreen(),
       },
     );
   }
