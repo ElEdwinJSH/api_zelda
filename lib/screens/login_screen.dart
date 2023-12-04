@@ -16,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   //----------------------------------------------------------------------------------------------------------
-  late String routeName;
 
   @override
   void initState() {
@@ -31,32 +30,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     if (isRegister == true) {
-      isRegister = false;
+  
     } else {
-      fadeOutAndStopMusic();
-
-      isRegister = false;
+      fadeMusica();
     }
-
     super.dispose();
   }
-
-/*  void fadeOutAndStopMusic() async {
-    print('FUNCIONOOOOOOOOOOOOOOO');
-    print(isRegister);
-    const fadeDuration = Duration(milliseconds: 500); // Puedes ajustar la duración del fade out según tus preferencias
-    const fadeSteps = 10;
-    const initialVolume = 1.0;
-
-    for (int i = 0; i < fadeSteps; i++) {
-        
-      double volume = initialVolume - (i / fadeSteps);
-      await player.setVolume(volume);
-      await Future.delayed(fadeDuration ~/ fadeSteps);
-    }
-    
-    player.stop(); // Detiene la reproducción después del fade out
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +69,7 @@ bool isRegister = false;
 bool isMusicPlayed = false;
 AudioPlayer player = AudioPlayer();
 
-Future<void> fadeOutAndStopMusic() async {
-  print('FUNCIONOOOOOOOOOOOOOOO');
-  print(isRegister);
+void fadeMusica() async {
   const fadeDuration = Duration(
       milliseconds:
           500); // Puedes ajustar la duración del fade out según tus preferencias
@@ -227,18 +204,13 @@ class _LoginState extends State<_Login> {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            setState(() {
+                           
                               isRegister = true; //cambia el estado de musica
-                            });
-                            print('antes del navigator');
-                            print(isRegister);
-
+  
                             Navigator.pushNamed(context, 'register').then((_) {
-                              setState(() {
-                                isRegister = false; //cambia el estado de musica
-                                print('des del navigator');
-                                print(isRegister);
-                              });
+
+                            isRegister = false;
+
                             });
                           }),
                   ],
