@@ -7,7 +7,6 @@ import 'package:api_zelda/services/auth_services.dart';
 import 'package:api_zelda/services/notifications_services.dart';
 import 'package:provider/provider.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -15,13 +14,14 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {//----------------------------------------------------------------------------------------------------------
+class _LoginScreenState extends State<LoginScreen> {
+  //----------------------------------------------------------------------------------------------------------
   late String routeName;
 
   @override
   void initState() {
     super.initState();
-           player.setVolume(1.0);
+    player.setVolume(1.0);
     if (!isMusicPlayed) {
       playm('File_Select.mp3');
       isMusicPlayed = true;
@@ -30,17 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {//--------------------------
 
   @override
   void dispose() {
+    if (isRegister == true) {
+      isRegister = false;
+    } else {
+      fadeOutAndStopMusic();
 
-    if (isRegister== true) {
-   
- isRegister = false;
-    }else{
-         fadeOutAndStopMusic();
-
-    isRegister = false;
-   
+      isRegister = false;
     }
-  
 
     super.dispose();
   }
@@ -61,8 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {//--------------------------
     
     player.stop(); // Detiene la reproducción después del fade out
   }*/
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,43 +84,41 @@ class _LoginScreenState extends State<LoginScreen> {//--------------------------
   Future<void> playm(String path) async {
     await player.play(AssetSource(path));
   }
-}//----------------------------------------------------------------------------------------------------------
+} //----------------------------------------------------------------------------------------------------------
 
 bool isRegister = false;
 bool isMusicPlayed = false;
-  AudioPlayer player = AudioPlayer();
+AudioPlayer player = AudioPlayer();
 
- Future<void> fadeOutAndStopMusic() async {
-      print('FUNCIONOOOOOOOOOOOOOOO');
-    print(isRegister);
-    const fadeDuration = Duration(milliseconds: 500); // Puedes ajustar la duración del fade out según tus preferencias
-    const fadeSteps = 10;
-    const initialVolume = 1.0;
+Future<void> fadeOutAndStopMusic() async {
+  print('FUNCIONOOOOOOOOOOOOOOO');
+  print(isRegister);
+  const fadeDuration = Duration(
+      milliseconds:
+          500); // Puedes ajustar la duración del fade out según tus preferencias
+  const fadeSteps = 10;
+  const initialVolume = 1.0;
 
-    for (int i = 0; i < fadeSteps; i++) {
-        
-      double volume = initialVolume - (i / fadeSteps);
-      await player.setVolume(volume);
-      await Future.delayed(fadeDuration ~/ fadeSteps);
-    }
-    
-    player.stop(); // Detiene la reproducción después del fade 
-  
+  for (int i = 0; i < fadeSteps; i++) {
+    double volume = initialVolume - (i / fadeSteps);
+    await player.setVolume(volume);
+    await Future.delayed(fadeDuration ~/ fadeSteps);
   }
 
+  player.stop(); // Detiene la reproducción después del fade
+}
 
-
-class _Login extends StatefulWidget {//------------
+class _Login extends StatefulWidget {
+  //------------
   const _Login({super.key});
 
   @override
   State<_Login> createState() => _LoginState();
-}//-------------------------------------
+} //-------------------------------------
 
-class _LoginState extends State<_Login> {//----------------------------------------------------------
+class _LoginState extends State<_Login> {
+  //----------------------------------------------------------
 
-
- 
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
@@ -195,14 +187,13 @@ class _LoginState extends State<_Login> {//-------------------------------------
                           loginForm.email, loginForm.password);
 
                       if (errorMessage == null) {
-                          isRegister = false;
+                        isRegister = false;
                         setState(() {
                           isMusicPlayed = false;
                           isRegister = false;
                           //cambia el estado de musica
                         });
-fadeOutAndStopMusic();
-                        
+
                         Navigator.pushReplacementNamed(context, 'home');
                       } else {
                         // TODO: mostrar error en pantalla
@@ -242,16 +233,12 @@ fadeOutAndStopMusic();
                             print('antes del navigator');
                             print(isRegister);
 
-                            Navigator.pushNamed(context, 'register')
-                                .then((_) {
-                            setState(() {
-                              isRegister = false; //cambia el estado de musica
-                               print('des del navigator');
-                              print(isRegister);
-                            });
-
-                             
-
+                            Navigator.pushNamed(context, 'register').then((_) {
+                              setState(() {
+                                isRegister = false; //cambia el estado de musica
+                                print('des del navigator');
+                                print(isRegister);
+                              });
                             });
                           }),
                   ],
@@ -263,4 +250,4 @@ fadeOutAndStopMusic();
       ),
     );
   }
-}//----------------------------------------------------------------------------------------------------------
+} //----------------------------------------------------------------------------------------------------------

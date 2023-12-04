@@ -2,14 +2,14 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/models/zelda_games.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreen extends StatefulWidget {//-------------------------------------------------
   const DetailsScreen({super.key});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
-}
+}//-------------------------------------------------
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class _DetailsScreenState extends State<DetailsScreen> {//-------------------------------------------------
   AudioPlayer player = AudioPlayer();
 
   bool isTextVisible = true;
@@ -19,14 +19,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
     });
   }
 
- @override
+  @override
   void dispose() {
-     fadeOutAndStopMusic();// Llamas a la función que detiene la música al cerrar la pantalla
+    fadeMusica(); // Llamas a la función que detiene la música al cerrar la pantalla
     super.dispose();
   }
 
-   void fadeOutAndStopMusic() async {
-    const fadeDuration = Duration(milliseconds: 500); // Puedes ajustar la duración del fade out según tus preferencias
+  void fadeMusica() async {
+    const fadeDuration = Duration(
+        milliseconds:
+            500); // Puedes ajustar la duración del fade out según tus preferencias
     const fadeSteps = 10;
     const initialVolume = 1.0;
 
@@ -38,36 +40,33 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     player.stop(); // Detiene la reproducción después del fade out
   }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {//-------------------------------------------------
     final size = MediaQuery.of(context).size;
     final Games game = ModalRoute.of(context)?.settings.arguments as Games;
 
-
-
-     playm(game.id+'.mp3');
-
+    playm('${game.id}.mp3');
 
     return Scaffold(
       backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
           backgroundColor: Colors.green.shade800,
           title: Text(
-          (game.id == '5f6ce9d805615a85623ec2ce') ? 'The Legend of Zelda Tears of the Kingdom' : game.name,
+            (game.id == '5f6ce9d805615a85623ec2ce')
+                ? 'The Legend of Zelda Tears of the Kingdom'
+                : game.name,
             style: TextStyle(fontSize: 15),
           )),
       body: Center(
         child: Stack(
           children: <Widget>[
             GestureDetector(
-              
               onTap: () {
                 if (!isTextVisible) {
                   toggleTextVisibility();
                 }
               },
-              
-              
               child: Container(
                 width: size.width,
                 height: size.height,
@@ -98,14 +97,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
         ),
       ),
     );
-  }
+  }//-------------------------------------------------
 
   Future<void> playm(String path) async {
     await player.play(AssetSource(path));
   }
-}
+}//-------------------------------------------------
 
-class _Texto extends StatelessWidget {
+class _Texto extends StatelessWidget {//-------------------------------------------------
   final Games games;
 
   const _Texto({super.key, required this.games});
@@ -136,10 +135,9 @@ class _Texto extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              (games.id == '5f6ce9d805615a85623ec2ce') ? 'Tears of the Kingdom retains the open-world action-adventure gameplay of Breath of the Wild (2017). As Link, players explore Hyrule and two new areas; the sky, which is littered with numerous floating islands, and the Depths, a vast underground area beneath Hyrule, to find weapons and resources and complete quests.' :  games.description,
-
-
-            
+              (games.id == '5f6ce9d805615a85623ec2ce')
+                  ? 'Tears of the Kingdom retains the open-world action-adventure gameplay of Breath of the Wild (2017). As Link, players explore Hyrule and two new areas; the sky, which is littered with numerous floating islands, and the Depths, a vast underground area beneath Hyrule, to find weapons and resources and complete quests.'
+                  : games.description,
               style: const TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 10),
@@ -156,15 +154,5 @@ class _Texto extends StatelessWidget {
       ),
     );
   }
-}
-
-class _Musica extends StatelessWidget {
-  final Games game;
-  const _Musica({super.key, required this.game});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(game.gameMusic);
-  }
-}
+}//-------------------------------------------------
 
