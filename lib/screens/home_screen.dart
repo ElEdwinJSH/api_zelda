@@ -58,8 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class DrawerN extends StatelessWidget {
+  const DrawerN({super.key});
+
+  
   @override
   Widget build(BuildContext context) {
+        final gamesProvider = Provider.of<GamesProvider>(context);
 
   final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -79,7 +83,7 @@ class DrawerN extends StatelessWidget {
             title: Text('Juegos Favoritos'),
             onTap: () {
               print(userEmail);
-               Navigator.pushNamed(context, 'favoritos', arguments: { 'userEmail': userEmail});
+               Navigator.pushNamed(context, 'favoritos', arguments: {'game': gamesProvider.onDisplayGames, 'userEmail': userEmail});
             },
           ),
         
