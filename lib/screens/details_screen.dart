@@ -1,9 +1,12 @@
+import 'package:api_zelda/services/auth_services.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/models/zelda_games.dart';
+import 'package:provider/provider.dart';
 
 class DetailsScreen extends StatefulWidget {//-------------------------------------------------
-  const DetailsScreen({super.key});
+
+  const DetailsScreen({super.key,});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -11,6 +14,8 @@ class DetailsScreen extends StatefulWidget {//----------------------------------
 
 class _DetailsScreenState extends State<DetailsScreen> {//-------------------------------------------------
   AudioPlayer player = AudioPlayer();
+  
+   bool isFavorite = false;
 
   bool isTextVisible = true;
   void toggleTextVisibility() {
@@ -43,8 +48,12 @@ class _DetailsScreenState extends State<DetailsScreen> {//----------------------
 
   @override
   Widget build(BuildContext context) {//-------------------------------------------------
+  
     final size = MediaQuery.of(context).size;
-    final Games game = ModalRoute.of(context)?.settings.arguments as Games;
+    final Map<String, dynamic> args =
+    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+final Games game = args['game'];
+final String userEmail = args['userEmail'];
 
     playm('${game.id}.mp3');
 
@@ -56,8 +65,21 @@ class _DetailsScreenState extends State<DetailsScreen> {//----------------------
             (game.id == '5f6ce9d805615a85623ec2ce')
                 ? 'The Legend of Zelda Tears of the Kingdom'
                 : game.name,
+                
             style: TextStyle(fontSize: 15),
-          )),
+          ),actions: [
+          IconButton(
+            icon: Icon(
+              isFavorite==true ? Icons.favorite : Icons.favorite_border,
+              color: Colors.red,
+              size: 30,
+            ),
+            onPressed: () {
+              toggleFavorite();
+            },
+          ),
+        ],
+          ),
       body: Center(
         child: Stack(
           children: <Widget>[
@@ -97,12 +119,49 @@ class _DetailsScreenState extends State<DetailsScreen> {//----------------------
         ),
       ),
     );
+
+
+    
   }//-------------------------------------------------
+void toggleFavorite() {
+setState(() {
+  isFavorite = !isFavorite;
+});
+
+
+   final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+final Games game = args['game'];
+final String userEmail = args['userEmail'];
+  
+ // isFavorite = !isFavorite;
+ String juegoId = game.id;
+
+    final authService = Provider.of<AuthService>(context, listen: false);
+print(userEmail);
+print(juegoId);
+    // Llama a la función correspondiente en tu servicio
+    if (isFavorite==true) {
+      print('entra');
+      authService.agregarJuegoFavorito(userEmail,juegoId);
+    } else {
+      //authService.quitarJuegoFavorito(juegoId);
+    }
+  
+}
 
   Future<void> playm(String path) async {
     await player.play(AssetSource(path));
   }
 }//-------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 class _Texto extends StatelessWidget {//-------------------------------------------------
   final Games games;

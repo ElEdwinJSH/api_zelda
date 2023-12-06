@@ -1,3 +1,4 @@
+import 'package:api_zelda/screens/fav_game_screen.dart';
 import 'package:api_zelda/widgets/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/providers/games_provider.dart';
@@ -17,7 +18,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   AudioPlayer player = AudioPlayer();
+  late String userEmail;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
+    // Retrieve the email from the arguments
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    userEmail = args['email'];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.green.shade700,
-          title: Center(
+          title: const Center(
             child: Text('Zelda API'),
           ),
             leading: IconButton(
@@ -36,12 +46,43 @@ class _HomeScreenState extends State<HomeScreen> {
             Navigator.pushReplacementNamed(context, 'login');
           },
         ),),
-      body: Column(children: [CardSwiper(games: gamesProvider.onDisplayGames)]),
+      endDrawer: DrawerN(),
+      body: Column(children: [CardSwiper(games: gamesProvider.onDisplayGames, userEmail: userEmail)]),
       backgroundColor: Colors.grey.shade900,
     );
   }
 
   Future<void> playm(String path) async {
     await player.play(AssetSource(path));
+  }
+}
+
+class DrawerN extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text('Menú'),
+          ),
+          ListTile(
+            title: Text('Juegos Favoritos'),
+            onTap: () {
+              Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => FavGame()),
+);
+            },
+          ),
+        
+          // Agregar más opciones según sea necesario
+        ],
+      ),
+    );
   }
 }

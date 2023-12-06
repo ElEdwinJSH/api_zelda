@@ -8,7 +8,8 @@ import 'package:soundpool/soundpool.dart';
 
 class CardSwiper extends StatefulWidget {//---------------------------------
   final List<Games> games;
-  const CardSwiper({super.key, required this.games});
+   final String userEmail;
+  const CardSwiper({super.key, required this.games, required this.userEmail});
 
   @override
   State<CardSwiper> createState() => _CardSwiperState();
@@ -68,10 +69,10 @@ class _CardSwiperState extends State<CardSwiper> {//----------------------------
                 return GestureDetector(
                   onTap: () {
                     //pausa la musica al tocar la tarjeta
-                  
+                  print(widget.userEmail);
                       fadeMusica(); //si hay musica, se va a detener
                   
-                    Navigator.pushNamed(context, 'details', arguments: game)
+                    Navigator.pushNamed(context, 'details', arguments: {'game': game, 'userEmail': widget.userEmail})
                         .then((_) {
                       // el codigo corre cuando details cierra.
                       playm('Menu.mp3');

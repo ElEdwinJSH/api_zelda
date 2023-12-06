@@ -28,38 +28,27 @@ class AuthService extends ChangeNotifier {
     if (decodedResp.containsKey('token')) {
       // Token hay que guardarlo en un lugar seguro
       await storage.write(key: 'token', value: decodedResp['token']);
-      // decodedResp['idToken'];
+    
       return null;
     } else {
       return decodedResp['error']['message'];
     }
-  }
+  }//-----------------------------------------------------------
 
-  Future<String?> login(String email, String password) async {
+  Future<String?> login(String email, String password) async {//-----------------------------------------------------------
     final Map<String, dynamic> authData = {
       'email': email,
       'password': password
     };
     final url = Uri.http(_baseUrl, '/api/Cuentas/Login');
 
-    //final url2 = Uri.https(_baseUrl, '/Prueba/on');
-
-    /*final resp2 = await http.get(url2, headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json'
-    });*/
+ 
 
     final resp = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: json.encode(authData));
 
-    /*final resp = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Accept': 'application/json'
-        },
-        body: json.encode(authData));*/
-
+  
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
     if (decodedResp.containsKey('token')) {
@@ -70,7 +59,7 @@ class AuthService extends ChangeNotifier {
     } else {
       return decodedResp['error']['message'];
     }
-  }
+  }//-----------------------------------------------------------
 
   Future logout() async {
     await storage.delete(key: 'token');
@@ -80,4 +69,84 @@ class AuthService extends ChangeNotifier {
   Future<String> readToken() async {
     return await storage.read(key: 'token') ?? '';
   }
+
+
+  Future<String?> getUserId() async {
+    try {
+      final token = await readToken();
+
+      if (token != null) {
+        // Decodificar el token para obtener la información del usuario
+        final Map<String, dynamic> decodedToken = json.decode(
+          ascii.decode(base64.decode(base64.normalize(token.split(".")[1]))),
+        );
+
+        // Aquí asumimos que el ID del usuario está presente en el token
+        if (decodedToken.containsKey('sub')) {
+          return decodedToken['sub'];
+        }
+      }
+    } catch (e) {
+      print('Error al obtener el ID del usuario: $e');
+    }
+
+    return null;
+  }
+
+  
+Future<void> agregarJuegoFavorito(String userId, String gameId) async {
+  try {
+    final Map<String, dynamic> data = {
+      'id': 0,
+      'userId': userId,
+      'juegoId': gameId,
+    };
+
+    final url = Uri.http(_baseUrl, '/api/Cuentas/JuegoFavorito');
+
+    final resp = await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode(data),
+    );
+
+    if (resp.statusCode == 200) {
+      print('Juego favorito agregado con éxito');
+    } else {
+      print('Error al agregar juego favorito. Código de estado: ${resp.statusCode}');
+    }
+  } catch (error) {
+    print('Excepción al agregar juego favorito: $error');
+  }
+}
+
+Future<List<Map<String, dynamic>>?> obtenerJuegosFavoritos() async {
+    final url = Uri.http(_baseUrl, '/api/Cuentas/ObtenerJuegosFavoritos');
+
+    final token = await readToken();
+
+    final resp = await http.get(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (resp.statusCode == 200) {
+      // Decodificar la respuesta JSON
+      final List<dynamic> decodedList = json.decode(resp.body);
+      
+      // Convertir la lista de mapas a una lista tipada si es necesario
+      final List<Map<String, dynamic>> juegosFavoritos = List<Map<String, dynamic>>.from(decodedList);
+
+      return juegosFavoritos;
+    } else {
+      // Manejar errores según sea necesario
+      return null;
+    }
+  }
+
 }

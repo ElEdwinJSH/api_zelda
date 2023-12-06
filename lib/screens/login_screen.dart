@@ -171,7 +171,7 @@ class _LoginState extends State<_Login> {
                           //cambia el estado de musica
                         });
 
-                        Navigator.pushReplacementNamed(context, 'home');
+                        Navigator.pushReplacementNamed(context, 'home',arguments:{'email': loginForm.email});
                       } else {
                         // TODO: mostrar error en pantalla
                         // print( errorMessage );
