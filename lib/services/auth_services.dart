@@ -122,30 +122,27 @@ Future<void> agregarJuegoFavorito(String userId, String gameId) async {
   }
 }
 
-Future<List<Map<String, dynamic>>?> obtenerJuegosFavoritos() async {
-    final url = Uri.http(_baseUrl, '/api/Cuentas/ObtenerJuegosFavoritos');
+ Future<List<Map<String, dynamic>>> obtenerJuegosFavoritos(String userId) async {
+    try {
+      final url = Uri.http(_baseUrl, '/api/Cuentas/$userId');
 
-    final token = await readToken();
+      final resp = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
 
-    final resp = await http.get(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    if (resp.statusCode == 200) {
-      // Decodificar la respuesta JSON
-      final List<dynamic> decodedList = json.decode(resp.body);
-      
-      // Convertir la lista de mapas a una lista tipada si es necesario
-      final List<Map<String, dynamic>> juegosFavoritos = List<Map<String, dynamic>>.from(decodedList);
-
-      return juegosFavoritos;
-    } else {
-      // Manejar errores según sea necesario
-      return null;
+      if (resp.statusCode == 200) {
+        final List<dynamic> data = json.decode(resp.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        print('Error al obtener juegos favoritos. Código de estado: ${resp.statusCode}');
+        return [];
+      }
+    } catch (error) {
+      print('Excepción al obtener juegos favoritos: $error');
+      return [];
     }
   }
 

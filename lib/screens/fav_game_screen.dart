@@ -1,18 +1,35 @@
+import 'package:api_zelda/models/zelda_games.dart';
 import 'package:api_zelda/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
-class FavGame extends StatelessWidget {
-   FavGame({super.key});
+class FavGame extends StatefulWidget {
+  
+   FavGame({super.key,});
+
+  @override
+  State<FavGame> createState() => _FavGameState();
+}
+
+class _FavGameState extends State<FavGame> {
 final AuthService authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
+
+
+    final Map<String, dynamic> args =
+    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+//final Games game = args['game'];
+final String userEmail = args['userEmail'];
+
+print(userEmail);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.green.shade700,
         title: const Text('Juegos Favoritos'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>?>(
-        future: authService.obtenerJuegosFavoritos(),
+        future: authService.obtenerJuegosFavoritos(userEmail),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // Muestra un indicador de carga mientras se obtienen los datos

@@ -60,6 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
 class DrawerN extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+  final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+   final userEmail = args['email'];
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -73,10 +78,8 @@ class DrawerN extends StatelessWidget {
           ListTile(
             title: Text('Juegos Favoritos'),
             onTap: () {
-              Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => FavGame()),
-);
+              print(userEmail);
+               Navigator.pushNamed(context, 'favoritos', arguments: { 'userEmail': userEmail});
             },
           ),
         

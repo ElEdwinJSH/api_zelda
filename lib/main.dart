@@ -1,5 +1,6 @@
 import 'package:api_zelda/providers/games_provider.dart';
 import 'package:api_zelda/screens/check_auth_screen.dart';
+import 'package:api_zelda/screens/fav_game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/screens/screens.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         'login': (_) => LoginScreen(),
         'register': (_) => RegistroScreen(),
         'checking': (_) => CheckAuthScreen(),
+        'favoritos': (_) => FavGame(),
       },
     );
   }
