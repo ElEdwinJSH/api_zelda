@@ -82,6 +82,7 @@ class DrawerN extends StatelessWidget {
           ListTile(
             title: Text('Juegos Favoritos'),
             onTap: () {
+              print('home');
               print(userEmail);
                Navigator.pushNamed(context, 'favoritos', arguments: {'game': gamesProvider.onDisplayGames, 'userEmail': userEmail});
             },

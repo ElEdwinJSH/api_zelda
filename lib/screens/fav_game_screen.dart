@@ -25,7 +25,7 @@ class _FavGameState extends State<FavGame> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final List<Games> games = args['game'];
     final String userEmail = args['userEmail'];
-
+print('fav');
     print(userEmail);
     return Scaffold(
       appBar: AppBar(
@@ -66,8 +66,10 @@ class _FavGameState extends State<FavGame> {
                 if (game != null) {
                  return GestureDetector(
         onTap: () {
+          print('ontat');
+          print(userEmail);
           // Navegar a otra pantalla cuando se toca el elemento
-           Navigator.pushNamed(context, 'details', arguments: {'game': game, });
+           Navigator.pushNamed(context, 'details', arguments: {'game': game,'userEmail': userEmail});
         },
         child: ListTile(
           title: Text(game.name ?? ''),
