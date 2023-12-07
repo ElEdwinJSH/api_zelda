@@ -53,7 +53,7 @@ class _DetailsScreenState extends State<DetailsScreen> {//----------------------
     final Map<String, dynamic> args =
     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 final Games game = args['game'];
-final String userEmail = args['userEmail'];
+//final String userEmail = args['userEmail'];
 
     playm('${game.id}.mp3');
 

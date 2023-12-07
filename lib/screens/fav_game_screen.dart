@@ -1,6 +1,8 @@
 import 'package:api_zelda/models/zelda_games.dart';
+import 'package:api_zelda/providers/games_provider.dart';
 import 'package:api_zelda/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FavGame extends StatefulWidget {
   const FavGame({
@@ -16,6 +18,9 @@ class _FavGameState extends State<FavGame> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final List<Games> games = args['game'];
@@ -47,20 +52,29 @@ class _FavGameState extends State<FavGame> {
               child: Text('No tienes juegos favoritos'),
             );
           } else {
+            
             // Muestra la lista de juegos favoritos
             List<Map<String, dynamic>> juegosFavoritos = snapshot.data!;
             return ListView.builder(
               itemCount: juegosFavoritos.length,
               itemBuilder: (_, index) {
+final gamess = games[index];
+
                 final game = games.firstWhere(
                     (game) => game.id == juegosFavoritos[index]['juegoId'],);//aqui checa si el gameid y el juegoid de ese index son iguales
 
                 //  final game = games[index];
                 if (game != null) {
-                  return ListTile(
-                    title: Text(game.name ?? ''),
-                    // leading: Image.network(game.imagenUrl ?? ''),
-                  );
+                 return GestureDetector(
+        onTap: () {
+          // Navegar a otra pantalla cuando se toca el elemento
+           Navigator.pushNamed(context, 'details', arguments: {'game': game, });
+        },
+        child: ListTile(
+          title: Text(game.name ?? ''),
+          leading: Image.asset(game.gameImage ?? ''),
+        ),
+      );
                 } else {
                   // Puedes devolver un widget vacío o null si no hay coincidencia
                   return SizedBox.shrink();
