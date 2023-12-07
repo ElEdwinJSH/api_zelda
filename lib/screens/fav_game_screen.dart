@@ -31,7 +31,13 @@ print('fav');
       appBar: AppBar(
         backgroundColor: Colors.green.shade700,
         title: const Text('Juegos Favoritos'),
-      ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            authService.logout();
+            Navigator.pushReplacementNamed(context, 'home',arguments:{'email': userEmail});
+          },
+      ),),
       body: FutureBuilder<List<Map<String, dynamic>>?>(
         future: authService.obtenerJuegosFavoritos(userEmail),
         builder: (context, snapshot) {

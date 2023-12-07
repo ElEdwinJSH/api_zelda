@@ -1,5 +1,7 @@
+import 'package:api_zelda/models/zelda_games.dart';
 import 'package:api_zelda/screens/fav_game_screen.dart';
 import 'package:api_zelda/widgets/card_swiper.dart';
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/providers/games_provider.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   AudioPlayer player = AudioPlayer();
   late String userEmail;
+   @override
+  void initState() {
+    super.initState();
+    playm('Menu.mp3');
+  }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -28,11 +35,38 @@ class _HomeScreenState extends State<HomeScreen> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     userEmail = args['email'];
   }
+  
+  @override
+  void dispose() {
+    fadeMusica(); // Llamas a la función que detiene la música al cerrar la pantalla
+    super.dispose();
+  }
+
+  void fadeMusica() async {
+    const fadeDuration = Duration(
+        milliseconds:
+            500); // Puedes ajustar la duración del fade out según tus preferencias
+    const fadeSteps = 10;
+    const initialVolume = 1.0;
+
+    for (int i = 0; i < fadeSteps; i++) {
+      double volume = initialVolume - (i / fadeSteps);
+      await player.setVolume(volume);
+      await Future.delayed(fadeDuration ~/ fadeSteps);
+    }
+
+    player.stop(); // Detiene la reproducción después del fade out
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
     final gamesProvider = Provider.of<GamesProvider>(context);
+    
+    final size = MediaQuery.of(context).size;
+    
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.green.shade700,
@@ -47,7 +81,59 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),),
       endDrawer: DrawerN(),
-      body: Column(children: [CardSwiper(games: gamesProvider.onDisplayGames, userEmail: userEmail)]),
+      body: Center(child: Column(
+        children: [
+         const SizedBox(height: 16.0),
+       
+        const SizedBox(height: 16.0),
+        Container(
+          child: SizedBox(
+            width: size.width * 0.95,
+            height: size.height * 0.78,
+            child: Swiper(
+              itemBuilder: (_, int index) {
+                final game = gamesProvider.onDisplayGames[index];
+
+                // count = games.length + 1;
+                return GestureDetector(
+                  onTap: () {
+                    //pausa la musica al tocar la tarjeta
+                  print(userEmail);
+                      fadeMusica(); //si hay musica, se va a detener
+                  
+                    Navigator.pushNamed(context, 'details', arguments: {'game': game, 'userEmail': userEmail})
+                        .then((_) {
+                      // el codigo corre cuando details cierra.
+                      playm('Menu.mp3');
+                      player.setVolume(1.0);
+                    });
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image(
+//                      placeholder: AssetImage(game.gameImage),
+                      image: AssetImage(game.gameImage),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ); //saber que se hace con el tactil con el dedo
+              },
+            
+              itemCount: gamesProvider.onDisplayGames.length,
+              itemHeight: size.height * 0.4,
+              itemWidth: size.width * 0.5,
+              control: const SwiperControl(
+                iconNext: Icons.arrow_forward,
+                iconPrevious: Icons.arrow_back,
+                color: Colors.blue,
+                size: 50,
+                padding: EdgeInsets.all(5),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),),
       backgroundColor: Colors.grey.shade900,
     );
   }
@@ -84,7 +170,7 @@ class DrawerN extends StatelessWidget {
             onTap: () {
               print('home');
               print(userEmail);
-               Navigator.pushNamed(context, 'favoritos', arguments: {'game': gamesProvider.onDisplayGames, 'userEmail': userEmail});
+               Navigator.pushReplacementNamed(context, 'favoritos', arguments: {'game': gamesProvider.onDisplayGames, 'userEmail': userEmail});
             },
           ),
         
@@ -94,3 +180,114 @@ class DrawerN extends StatelessWidget {
     );
   }
 }
+
+
+/*
+class CardSwiper extends StatefulWidget {//---------------------------------
+  final List<Games> games;
+   final String userEmail;
+  const CardSwiper({super.key, required this.games, required this.userEmail});
+
+  @override
+  State<CardSwiper> createState() => _CardSwiperState();
+}//---------------------------------------------------------------------
+
+class _CardSwiperState extends State<CardSwiper> {//---------------------------------------
+  @override
+  void initState() {
+    super.initState();
+    playm('Menu.mp3');
+  }
+
+  @override
+  void dispose() {
+    fadeMusica(); // Llamas a la función que detiene la música al cerrar la pantalla
+    super.dispose();
+  }
+
+  void fadeMusica() async {
+    const fadeDuration = Duration(
+        milliseconds:
+            500); // Puedes ajustar la duración del fade out según tus preferencias
+    const fadeSteps = 10;
+    const initialVolume = 1.0;
+
+    for (int i = 0; i < fadeSteps; i++) {
+      double volume = initialVolume - (i / fadeSteps);
+      await player.setVolume(volume);
+      await Future.delayed(fadeDuration ~/ fadeSteps);
+    }
+
+    player.stop(); // Detiene la reproducción después del fade out
+  }
+
+  AudioPlayer player = AudioPlayer();
+  bool isMusicPlaying = true;
+
+  @override
+  Widget build(BuildContext context) {//---------------------------------------------------------
+
+    final size = MediaQuery.of(context).size;
+
+    return Center(
+      child: Column(children: [
+        const SizedBox(height: 16.0),
+       
+        const SizedBox(height: 16.0),
+        Container(
+          child: SizedBox(
+            width: size.width * 0.95,
+            height: size.height * 0.78,
+            child: Swiper(
+              itemBuilder: (_, int index) {
+                final game = widget.games[index];
+
+                // count = games.length + 1;
+                return GestureDetector(
+                  onTap: () {
+                    //pausa la musica al tocar la tarjeta
+                  print(widget.userEmail);
+                      fadeMusica(); //si hay musica, se va a detener
+                  
+                    Navigator.pushNamed(context, 'details', arguments: {'game': game, 'userEmail': widget.userEmail})
+                        .then((_) {
+                      // el codigo corre cuando details cierra.
+                      playm('Menu.mp3');
+                      player.setVolume(1.0);
+                    });
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image(
+//                      placeholder: AssetImage(game.gameImage),
+                      image: AssetImage(game.gameImage),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ); //saber que se hace con el tactil con el dedo
+              },
+            
+              itemCount: widget.games.length,
+              itemHeight: size.height * 0.4,
+              itemWidth: size.width * 0.5,
+              control: const SwiperControl(
+                iconNext: Icons.arrow_forward,
+                iconPrevious: Icons.arrow_back,
+                color: Colors.blue,
+                size: 50,
+                padding: EdgeInsets.all(5),
+              ),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }//--------------------------------------------------------------------------
+
+
+  Future<void> playm(String path) async {
+    await player.play(AssetSource(path));
+  }
+}//-----------------------------------------------------------------------------
+
+*/
