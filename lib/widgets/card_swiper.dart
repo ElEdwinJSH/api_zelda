@@ -2,9 +2,9 @@ import 'package:api_zelda/models/zelda_games.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+//import 'package:flutter/services.dart';
 //import 'package:audioplayers/audioplayers.dart';
-import 'package:soundpool/soundpool.dart';
+//import 'package:soundpool/soundpool.dart';
 
 class CardSwiper extends StatefulWidget {//---------------------------------
   final List<Games> games;

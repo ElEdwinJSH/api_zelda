@@ -58,7 +58,6 @@ class _FavGameState extends State<FavGame> {
             return ListView.builder(
               itemCount: juegosFavoritos.length,
               itemBuilder: (_, index) {
-final gamess = games[index];
 
                 final game = games.firstWhere(
                     (game) => game.id == juegosFavoritos[index]['juegoId'],);//aqui checa si el gameid y el juegoid de ese index son iguales

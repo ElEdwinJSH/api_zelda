@@ -28,27 +28,25 @@ class AuthService extends ChangeNotifier {
     if (decodedResp.containsKey('token')) {
       // Token hay que guardarlo en un lugar seguro
       await storage.write(key: 'token', value: decodedResp['token']);
-    
+
       return null;
     } else {
       return decodedResp['error']['message'];
     }
-  }//-----------------------------------------------------------
+  } //-----------------------------------------------------------
 
-  Future<String?> login(String email, String password) async {//-----------------------------------------------------------
+  Future<String?> login(String email, String password) async {
+    //-----------------------------------------------------------
     final Map<String, dynamic> authData = {
       'email': email,
       'password': password
     };
     final url = Uri.http(_baseUrl, '/api/Cuentas/Login');
 
- 
-
     final resp = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: json.encode(authData));
 
-  
     final Map<String, dynamic> decodedResp = json.decode(resp.body);
 
     if (decodedResp.containsKey('token')) {
@@ -59,7 +57,7 @@ class AuthService extends ChangeNotifier {
     } else {
       return decodedResp['error']['message'];
     }
-  }//-----------------------------------------------------------
+  } //-----------------------------------------------------------
 
   Future logout() async {
     await storage.delete(key: 'token');
@@ -69,7 +67,6 @@ class AuthService extends ChangeNotifier {
   Future<String> readToken() async {
     return await storage.read(key: 'token') ?? '';
   }
-
 
   Future<String?> getUserId() async {
     try {
@@ -93,36 +90,37 @@ class AuthService extends ChangeNotifier {
     return null;
   }
 
-  
-Future<void> agregarJuegoFavorito(String userId, String gameId) async {
-  try {
-    final Map<String, dynamic> data = {
-      'id': 0,
-      'userId': userId,
-      'juegoId': gameId,
-    };
+  Future<void> agregarJuegoFavorito(String userId, String gameId) async {
+    try {
+      final Map<String, dynamic> data = {
+        'id': 0,
+        'userId': userId,
+        'juegoId': gameId,
+      };
 
-    final url = Uri.http(_baseUrl, '/api/Cuentas/JuegoFavorito');
+      final url = Uri.http(_baseUrl, '/api/Cuentas/JuegoFavorito');
 
-    final resp = await http.post(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: json.encode(data),
-    );
+      final resp = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: json.encode(data),
+      );
 
-    if (resp.statusCode == 200) {
-      print('Juego favorito agregado con éxito');
-    } else {
-      print('Error al agregar juego favorito. Código de estado: ${resp.statusCode}');
+      if (resp.statusCode == 200) {
+        print('Juego favorito agregado con éxito');
+      } else {
+        print(
+            'Error al agregar juego favorito. Código de estado: ${resp.statusCode}');
+      }
+    } catch (error) {
+      print('Excepción al agregar juego favorito: $error');
     }
-  } catch (error) {
-    print('Excepción al agregar juego favorito: $error');
   }
-}
 
- Future<List<Map<String, dynamic>>> obtenerJuegosFavoritos(String userId) async {
+  Future<List<Map<String, dynamic>>> obtenerJuegosFavoritos(
+      String userId) async {
     try {
       final url = Uri.http(_baseUrl, '/api/Cuentas/$userId');
 
@@ -137,13 +135,88 @@ Future<void> agregarJuegoFavorito(String userId, String gameId) async {
         final List<dynamic> data = json.decode(resp.body);
         return data.cast<Map<String, dynamic>>();
       } else {
-        print('Error al obtener juegos favoritos. Código de estado: ${resp.statusCode}');
+        print(
+            'Error al obtener juegos favoritos. Código de estado: ${resp.statusCode}');
         return [];
       }
     } catch (error) {
       print('Excepción al obtener juegos favoritos: $error');
       return [];
     }
-  }
+  } //----------------------------------------------------------------------BUSCARFAV
 
+  Future<void> quitarJuegoFavorito(String userId, String gameId) async {
+    //-----------------------QUITAR FAV
+     try {
+    final urlb = Uri.http(_baseUrl, '/api/Cuentas/$userId');
+
+    final resp2 = await http.get(
+      urlb,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+  
+
+    final List<dynamic> userDataList = json.decode(resp2.body);
+    print('userda');
+    print(userDataList);
+
+    // Recorrer la lista de userData para buscar coincidencias
+    for (final userData in userDataList) {
+      print('a');
+      print(userData);
+     int registroId = userData['id'];
+     print('id');
+      print(registroId);
+
+      // Verificar si userId y gameId coinciden con los de la base de datos
+      if (userData['userId'] == userId && userData['juegoId'] == gameId) {
+    print('id');
+      print(registroId);
+      print(userData['userId']);
+      print('us');
+      print(userId);
+      print(userData['juegoId']);
+            print('jueg p');
+
+      print(gameId);
+
+        final Map<String, dynamic> data = {
+          'id': registroId,
+          'userId': userId,
+          'juegoId': gameId,
+        };
+
+        final url = Uri.http(_baseUrl, '/api/Cuentas/EliminarJuegoFavorito');
+
+        final resp = await http.delete(
+          url,
+          headers: {
+            "Content-Type": "application/json",
+            
+          },
+          body: json.encode(data),
+        );
+
+        if (resp.statusCode == 200) {
+          print('Juego favorito eliminado con éxito');
+          return; // Salir de la función después de eliminar el juego favorito
+        } else {
+          print('dentro del resp');
+          print('Error al eliminar juego favorito. Código de estado: ${resp.statusCode}');
+        }
+      } else {
+        print('userId y/o juegoId en los detalles no coinciden con la base de datos');
+      }
+    }
+
+    // Si no se encontró coincidencia después de recorrer toda la lista
+    print('No se encontraron coincidencias en la base de datos');
+  } catch (error) {
+      print('fuera de todo');
+    print('Excepción al eliminar juego favorito: $error');
+  }
+  }
 }
