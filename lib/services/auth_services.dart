@@ -218,5 +218,37 @@ class AuthService extends ChangeNotifier {
       print('fuera de todo');
     print('Excepción al eliminar juego favorito: $error');
   }
+  }//---------------------QUITAR FAV
+
+
+
+Future<bool> existeJuegoFavorito(String userId, String gameId) async {
+  try {
+    final url = Uri.http(_baseUrl, '/api/Cuentas/$userId');
+
+    final resp = await http.get(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (resp.statusCode == 200) {
+      final List<dynamic> userDataList = json.decode(resp.body);
+
+      // Verificar si existe un juego favorito con el userId y gameId proporcionados
+      return userDataList.any((userData) =>
+          userData['userId'] == userId && userData['juegoId'] == gameId);
+    } else {
+      print(
+          'Error al verificar juego favorito. Código de estado: ${resp.statusCode}');
+      return false;
+    }
+  } catch (error) {
+    print('Excepción al verificar juego favorito: $error');
+    return false;
   }
+}
+
+
 }

@@ -15,7 +15,30 @@ class DetailsScreen extends StatefulWidget {//----------------------------------
 class _DetailsScreenState extends State<DetailsScreen> {//-------------------------------------------------
   AudioPlayer player = AudioPlayer();
   
-   bool isFavorite = true;
+
+
+   bool isFavorite = false;
+@override
+void initState(){
+ super.initState();
+   Future.delayed(Duration.zero, () {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final Map<String, dynamic> args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      final Games game = args['game'];
+      final String userEmail = args['userEmail'];
+
+      // Verificar si el juego es favorito y asignar a isFavorite
+      authService.existeJuegoFavorito(userEmail, game.id).then((exists) {
+        setState(() {
+          isFavorite = exists;
+        });
+      });
+    });
+
+}
+
+   
 
   bool isTextVisible = true;
   void toggleTextVisibility() {

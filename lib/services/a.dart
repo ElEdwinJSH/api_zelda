@@ -1,4 +1,4 @@
-Future<void> quitarJuegoFavorito(String userId, String gameId) async {
+/*Future<void> quitarJuegoFavorito(String userId, String gameId) async {
   try {
     final urlb = Uri.http(_baseUrl, '/api/Cuentas/$userId');
 
@@ -116,4 +116,4 @@ print(registroId);
     print('No se encontraron coincidencias en la base de datos');
   } catch (error) {
     print('Excepción al eliminar juego favorito: $error');
-  }
+  }*/
