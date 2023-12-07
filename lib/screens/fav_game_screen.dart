@@ -1,6 +1,7 @@
 import 'package:api_zelda/models/zelda_games.dart';
 import 'package:api_zelda/providers/games_provider.dart';
 import 'package:api_zelda/services/auth_services.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,32 @@ class FavGame extends StatefulWidget {
 
 class _FavGameState extends State<FavGame> {
   final AuthService authService = AuthService();
+  AudioPlayer player = AudioPlayer();
+
+ Future<void> playm(String path) async {
+    await player.play(AssetSource(path));
+  }
+ @override
+  void initState() {
+    super.initState();
+    playm('JuegosFavoritos.mp3');
+  }
+void fadeMusica() async {
+    const fadeDuration = Duration(
+        milliseconds:
+            500); // Puedes ajustar la duración del fade out según tus preferencias
+    const fadeSteps = 10;
+    const initialVolume = 1.0;
+
+    for (int i = 0; i < fadeSteps; i++) {
+      double volume = initialVolume - (i / fadeSteps);
+      await player.setVolume(volume);
+      await Future.delayed(fadeDuration ~/ fadeSteps);
+    }
+
+    player.stop(); // Detiene la reproducción después del fade out
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +62,7 @@ print('fav');
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             authService.logout();
+             fadeMusica();
             Navigator.pushReplacementNamed(context, 'home',arguments:{'email': userEmail});
           },
       ),),
@@ -74,8 +102,14 @@ print('fav');
         onTap: () {
           print('ontat');
           print(userEmail);
+           fadeMusica();
           // Navegar a otra pantalla cuando se toca el elemento
-           Navigator.pushNamed(context, 'details', arguments: {'game': game,'userEmail': userEmail});
+           Navigator.pushNamed(context, 'details', arguments: {'game': game,'userEmail': userEmail}) .then((_) {
+                      // el codigo corre cuando details cierra.
+                      playm('JuegosFavoritos.mp3');
+                      player.setVolume(1.0);
+                       setState(() {});
+                    });
         },
         child: ListTile(
           title: Text(game.name ?? ''),
