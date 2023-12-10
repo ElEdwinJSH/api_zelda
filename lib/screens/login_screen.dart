@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(
               height: 5,
             ),
-            Text('Login'),
+            Text('Bienvenido',style: TextStyle(fontSize: 30),),
             const SizedBox(
               height: 5,
             ),

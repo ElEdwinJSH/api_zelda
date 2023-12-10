@@ -18,15 +18,17 @@ class _FavGameState extends State<FavGame> {
   final AuthService authService = AuthService();
   AudioPlayer player = AudioPlayer();
 
- Future<void> playm(String path) async {
+  Future<void> playm(String path) async {
     await player.play(AssetSource(path));
   }
- @override
+
+  @override
   void initState() {
     super.initState();
     playm('JuegosFavoritos.mp3');
   }
-void fadeMusica() async {
+
+  void fadeMusica() async {
     const fadeDuration = Duration(
         milliseconds:
             500); // Puedes ajustar la duración del fade out según tus preferencias
@@ -42,17 +44,13 @@ void fadeMusica() async {
     player.stop(); // Detiene la reproducción después del fade out
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
-
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final List<Games> games = args['game'];
     final String userEmail = args['userEmail'];
-print('fav');
+    print('fav');
     print(userEmail);
     return Scaffold(
       appBar: AppBar(
@@ -61,11 +59,13 @@ print('fav');
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            authService.logout();
-             fadeMusica();
-            Navigator.pushReplacementNamed(context, 'home',arguments:{'email': userEmail});
+            //  authService.logout();
+            fadeMusica();
+            Navigator.pushReplacementNamed(context, 'home',
+                arguments: {'email': userEmail});
           },
-      ),),
+        ),
+      ),
       body: FutureBuilder<List<Map<String, dynamic>>?>(
         future: authService.obtenerJuegosFavoritos(userEmail),
         builder: (context, snapshot) {
@@ -86,40 +86,36 @@ print('fav');
               child: Text('No tienes juegos favoritos'),
             );
           } else {
-            
             // Muestra la lista de juegos favoritos
             List<Map<String, dynamic>> juegosFavoritos = snapshot.data!;
             return ListView.builder(
               itemCount: juegosFavoritos.length,
               itemBuilder: (_, index) {
-
                 final game = games.firstWhere(
-                    (game) => game.id == juegosFavoritos[index]['juegoId'],);//aqui checa si el gameid y el juegoid de ese index son iguales
+                  (game) => game.id == juegosFavoritos[index]['juegoId'],
+                ); //aqui checa si el gameid y el juegoid de ese index son iguales
 
                 //  final game = games[index];
-                if (game != null) {
-                 return GestureDetector(
-        onTap: () {
-          print('ontat');
-          print(userEmail);
-           fadeMusica();
-          // Navegar a otra pantalla cuando se toca el elemento
-           Navigator.pushNamed(context, 'details', arguments: {'game': game,'userEmail': userEmail}) .then((_) {
+                return GestureDetector(
+                  onTap: () {
+                    print('ontap');
+                    print(userEmail);
+                    fadeMusica();
+                    // Navegar a otra pantalla cuando se toca el elemento
+                    Navigator.pushNamed(context, 'details',
+                            arguments: {'game': game, 'userEmail': userEmail})
+                        .then((_) {
                       // el codigo corre cuando details cierra.
                       playm('JuegosFavoritos.mp3');
                       player.setVolume(1.0);
-                       setState(() {});
+                      setState(() {});
                     });
-        },
-        child: ListTile(
-          title: Text(game.name ?? ''),
-          leading: Image.asset(game.gameImage ?? ''),
-        ),
-      );
-                } else {
-                  // Puedes devolver un widget vacío o null si no hay coincidencia
-                  return SizedBox.shrink();
-                }
+                  },
+                  child: ListTile(
+                    title: Text(game.name),
+                    leading: Image.asset(game.gameImage ?? ''),
+                  ),
+                );
               },
             );
           }

@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.green.shade700,
+          backgroundColor: Colors.green.shade800,
           title: const Center(
             child: Text('Zelda API'),
           ),
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
             authService.logout();
             Navigator.pushReplacementNamed(context, 'login');
           },
-        ),),
+        ), iconTheme: IconThemeData(color: Colors.black),),
       endDrawer: DrawerN(),
       body: Center(child: Column(
         children: [
@@ -161,9 +161,12 @@ class DrawerN extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.green.shade800,
             ),
-            child: Text('Menú'),
+           child: Container(
+    height: 50, // Ajusta la altura según tus necesidades
+    child: Text('Menú',style: TextStyle(fontSize: 30),),
+  ),
           ),
           ListTile(
             title: Text('Juegos Favoritos'),

@@ -147,108 +147,102 @@ class AuthService extends ChangeNotifier {
 
   Future<void> quitarJuegoFavorito(String userId, String gameId) async {
     //-----------------------QUITAR FAV
-     try {
-    final urlb = Uri.http(_baseUrl, '/api/Cuentas/$userId');
+    try {
+      final urlb = Uri.http(_baseUrl, '/api/Cuentas/$userId');
 
-    final resp2 = await http.get(
-      urlb,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
+      final resp2 = await http.get(
+        urlb,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+      final List<dynamic> userDataList = json.decode(resp2.body);
+      print('userda');
+      print(userDataList);
 
-  
+      // Recorrer la lista de userData para buscar coincidencias
+      for (final userData in userDataList) {
+      /*  print('a');
+        print(userData);*/
+        int registroId = userData['id'];
+       /* print('id');
+        print(registroId);*/
 
-    final List<dynamic> userDataList = json.decode(resp2.body);
-    print('userda');
-    print(userDataList);
+        // Verificar si userId y gameId coinciden con los de la base de datos
+        if (userData['userId'] == userId && userData['juegoId'] == gameId) {
+        /*  print('id');
+          print(registroId);
+          print(userData['userId']);
+          print('us');
+          print(userId);
+          print(userData['juegoId']);
+          print('jueg p');
 
-    // Recorrer la lista de userData para buscar coincidencias
-    for (final userData in userDataList) {
-      print('a');
-      print(userData);
-     int registroId = userData['id'];
-     print('id');
-      print(registroId);
+          print(gameId);
+*/
+          final Map<String, dynamic> data = {
+            'id': registroId,
+            'userId': userId,
+            'juegoId': gameId,
+          };
 
-      // Verificar si userId y gameId coinciden con los de la base de datos
-      if (userData['userId'] == userId && userData['juegoId'] == gameId) {
-    print('id');
-      print(registroId);
-      print(userData['userId']);
-      print('us');
-      print(userId);
-      print(userData['juegoId']);
-            print('jueg p');
+          final url = Uri.http(_baseUrl, '/api/Cuentas/EliminarJuegoFavorito');
 
-      print(gameId);
+          final resp = await http.delete(
+            url,
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: json.encode(data),
+          );
 
-        final Map<String, dynamic> data = {
-          'id': registroId,
-          'userId': userId,
-          'juegoId': gameId,
-        };
-
-        final url = Uri.http(_baseUrl, '/api/Cuentas/EliminarJuegoFavorito');
-
-        final resp = await http.delete(
-          url,
-          headers: {
-            "Content-Type": "application/json",
-            
-          },
-          body: json.encode(data),
-        );
-
-        if (resp.statusCode == 200) {
-          print('Juego favorito eliminado con éxito');
-          return; // Salir de la función después de eliminar el juego favorito
+          if (resp.statusCode == 200) {
+            print('Juego favorito eliminado con éxito');
+            return; // Salir de la función después de eliminar el juego favorito
+          } else {
+            print('dentro del resp');
+            print(
+                'Error al eliminar juego favorito. Código de estado: ${resp.statusCode}');
+          }
         } else {
-          print('dentro del resp');
-          print('Error al eliminar juego favorito. Código de estado: ${resp.statusCode}');
+          print(
+              'userId y/o juegoId en los detalles no coinciden con la base de datos');
         }
-      } else {
-        print('userId y/o juegoId en los detalles no coinciden con la base de datos');
       }
-    }
 
-    // Si no se encontró coincidencia después de recorrer toda la lista
-    print('No se encontraron coincidencias en la base de datos');
-  } catch (error) {
+      // Si no se encontró coincidencia después de recorrer toda la lista
+      print('No se encontraron coincidencias en la base de datos');
+    } catch (error) {
       print('fuera de todo');
-    print('Excepción al eliminar juego favorito: $error');
-  }
-  }//---------------------QUITAR FAV
+      print('Excepción al eliminar juego favorito: $error');
+    }
+  } //---------------------QUITAR FAV
 
+  Future<bool> existeJuegoFavorito(String userId, String gameId) async {
+    try {
+      final url = Uri.http(_baseUrl, '/api/Cuentas/$userId');
 
+      final resp = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
 
-Future<bool> existeJuegoFavorito(String userId, String gameId) async {
-  try {
-    final url = Uri.http(_baseUrl, '/api/Cuentas/$userId');
+      if (resp.statusCode == 200) {
+        final List<dynamic> userDataList = json.decode(resp.body);
 
-    final resp = await http.get(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
-
-    if (resp.statusCode == 200) {
-      final List<dynamic> userDataList = json.decode(resp.body);
-
-      // Verificar si existe un juego favorito con el userId y gameId proporcionados
-      return userDataList.any((userData) =>
-          userData['userId'] == userId && userData['juegoId'] == gameId);
-    } else {
-      print(
-          'Error al verificar juego favorito. Código de estado: ${resp.statusCode}');
+        // Verificar si existe un juego favorito con el userId y gameId proporcionados
+        return userDataList.any((userData) =>
+            userData['userId'] == userId && userData['juegoId'] == gameId);
+      } else {
+        print(
+            'Error al verificar juego favorito. Código de estado: ${resp.statusCode}');
+        return false;
+      }
+    } catch (error) {
+      print('Excepción al verificar juego favorito: $error');
       return false;
     }
-  } catch (error) {
-    print('Excepción al verificar juego favorito: $error');
-    return false;
   }
-}
-
-
 }
