@@ -51,10 +51,12 @@ class _LoginScreenState extends State<LoginScreen> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-          title: Center(child: Text(
-            'Bienvenido',
-            style: TextStyle(fontSize: 30,color: Colors.white),
-          ),),
+          title: Center(
+            child: Text(
+              'Bienvenido',
+              style: TextStyle(fontSize: 30, color: Colors.white),
+            ),
+          ),
           children: [
             Center(
                 child: Column(
@@ -133,16 +135,19 @@ class _LoginState extends State<_Login> {
                 autocorrect: false,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
-                  hintText: 'user@example.com',
-                  labelText: 'Correo electrónico',
-                  labelStyle: TextStyle(color: Colors.white70),
-                  hintStyle: TextStyle(color: Colors.white30),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                    hintText: 'user@example.com',
+                    labelText: 'Correo electrónico',
+                    labelStyle: TextStyle(color: Colors.white70),
+                    hintStyle: TextStyle(color: Colors.white30),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
                     errorStyle: TextStyle(color: Colors.orange),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange)),
-                  focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange))
-                ),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange)),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange))),
                 onChanged: (value) => loginForm.email = value,
                 validator: (value) {
                   String pattern =
@@ -162,16 +167,19 @@ class _LoginState extends State<_Login> {
                 obscureText: true,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
-                  hintText: '***',
-                  labelText: 'Contraseña',
-                   labelStyle: TextStyle(color: Colors.white70),
-                  hintStyle: TextStyle(color: Colors.white30),
-                  errorStyle: TextStyle(color: Colors.orange),
-                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange)),
-                  focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange))
-                ),
+                    hintText: '***',
+                    labelText: 'Contraseña',
+                    labelStyle: TextStyle(color: Colors.white70),
+                    hintStyle: TextStyle(color: Colors.white30),
+                    errorStyle: TextStyle(color: Colors.orange),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange)),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange))),
                 onChanged: (value) => loginForm.password = value,
                 validator: (value) {
                   return (value != null && value.length >= 6)
@@ -227,7 +235,11 @@ class _LoginState extends State<_Login> {
               child: RichText(
                 text: TextSpan(
                   text: "¿Sin cuenta?, da click en ",
-                  style: const TextStyle(fontSize: 14, color: Colors.black,  fontWeight: FontWeight.bold,),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                   children: <TextSpan>[
                     TextSpan(
                         text: "registrar",

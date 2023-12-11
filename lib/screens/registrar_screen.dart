@@ -1,3 +1,4 @@
+import 'package:api_zelda/widgets/video_player.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/providers/login_form_provider.dart';
@@ -16,24 +17,42 @@ class _RegistroScreenState extends State<RegistroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(
-            child: Column(
+        body: Stack(
+      children: [
+        VideoWidget(),
+        SimpleDialog(
+           backgroundColor: Color.fromARGB(255, 32, 63, 97).withOpacity(0.4),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+          title: const Center(
+            child: Text(
+              'Crear cuenta',
+              style: TextStyle(fontSize: 30, color: Colors.white),
+            ),
+          ),
           children: [
-            const SizedBox(
-              height: 5,
+            Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      child: Column(
+                        children: [
+                         
+                      
+                          ChangeNotifierProvider(
+                              create: (_) => LoginFormProvider(),
+                              child: const _Registrar())
+                        ],
+                      ),
+                    ),
+                  ]),
             ),
-            const Text('Crear cuenta'),
-            const SizedBox(
-              height: 5,
-            ),
-            ChangeNotifierProvider(
-                create: (_) => LoginFormProvider(), child: const _Registrar())
           ],
-        ))
-      ])),
-    );
+        ),
+      ],
+    ));
   }
 }
 
@@ -60,6 +79,17 @@ class _Registrar extends StatelessWidget {
                 decoration: const InputDecoration(
                   hintText: 'user@example.com',
                   labelText: 'Correo electrónico',
+                   labelStyle: TextStyle(color: Colors.white70),
+                    hintStyle: TextStyle(color: Colors.white30),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    errorStyle: TextStyle(color: Colors.orange),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange)),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange)),
                 ),
                 onChanged: (value) => loginForm.email = value,
                 validator: (value) {
@@ -82,6 +112,17 @@ class _Registrar extends StatelessWidget {
                 decoration: const InputDecoration(
                   hintText: '*****',
                   labelText: 'Contraseña',
+                   labelStyle: TextStyle(color: Colors.white70),
+                    hintStyle: TextStyle(color: Colors.white30),
+                    focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    errorStyle: TextStyle(color: Colors.orange),
+                    border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange)),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange)),
                 ),
                 onChanged: (value) => loginForm.password = value,
                 validator: (value) {
@@ -129,14 +170,15 @@ class _Registrar extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: RichText(
                 text: TextSpan(
-                  text: "¿No tienes una cuenta?, da click en ",
-                  style: const TextStyle(fontSize: 15, color: Colors.black),
+                  text: "¿Tienes cuenta?, da click en ",
+                  style: const TextStyle(fontSize: 14,  color: Colors.black,
+                    fontWeight: FontWeight.bold,),
                   children: <TextSpan>[
                     TextSpan(
                         text: "Logear",
                         style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.blue,
+                          fontSize: 14,
+                          color: Color.fromARGB(255, 53, 182, 143),
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
