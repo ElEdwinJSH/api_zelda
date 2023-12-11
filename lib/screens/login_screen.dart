@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     player.setVolume(1.0);
+     player.setReleaseMode(ReleaseMode.loop);
     if (!isMusicPlayed) {
       playm('File_Select.mp3');
 
@@ -135,6 +136,7 @@ class _LoginState extends State<_Login> {
                 autocorrect: false,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
+                  
                     hintText: 'user@example.com',
                     labelText: 'Correo electrónico',
                     labelStyle: TextStyle(color: Colors.white70),
@@ -147,7 +149,9 @@ class _LoginState extends State<_Login> {
                     errorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.orange)),
                     focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange))),
+                        borderSide: BorderSide(color: Colors.orange)),
+                        ),
+                style: TextStyle(color: Colors.white),
                 onChanged: (value) => loginForm.email = value,
                 validator: (value) {
                   String pattern =
@@ -180,6 +184,7 @@ class _LoginState extends State<_Login> {
                         borderSide: BorderSide(color: Colors.orange)),
                     focusedErrorBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.orange))),
+                style: TextStyle(color: Colors.white),
                 onChanged: (value) => loginForm.password = value,
                 validator: (value) {
                   return (value != null && value.length >= 6)

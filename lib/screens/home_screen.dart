@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
    @override
   void initState() {
     super.initState();
+     player.setReleaseMode(ReleaseMode.loop);
     playm('Menu.mp3');
   }
   @override
@@ -69,9 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
     
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.green.shade800,
+          backgroundColor: const Color.fromARGB(255, 24, 94, 28),
           title: const Center(
-            child: Text('Zelda API'),
+            child: Text('Zelda App'),
           ),
             leading: IconButton(
           icon: const Icon(Icons.login_outlined),
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),),
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: const Color.fromARGB(255, 15, 15, 15),
     );
   }
 
@@ -156,31 +157,34 @@ class DrawerN extends StatelessWidget {
    final userEmail = args['email'];
 
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.green.shade800,
-            ),
-           child: Container(
-    height: 50, // Ajusta la altura según tus necesidades
-    child: Text('Menú',style: TextStyle(fontSize: 30),),
+  child: Container(
+    color: const Color.fromARGB(255, 201, 201, 201), // Cambia el color a tu preferencia
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 28, 82, 31),
+          ),
+          child: Container(
+            height: 50, // Ajusta la altura según tus necesidades
+            child: Text('Menú', style: TextStyle(fontSize: 30, color: Colors.black),),
+          ),
+        ),
+        ListTile(
+          tileColor: const Color.fromARGB(255, 121, 120, 120),
+          title: Text('Juegos Favoritos'),
+          onTap: () {
+            print('home');
+            print(userEmail);
+            Navigator.pushReplacementNamed(context, 'favoritos', arguments: {'game': gamesProvider.onDisplayGames, 'userEmail': userEmail});
+          },
+        ),
+        // Agregar más opciones según sea necesario
+      ],
+    ),
   ),
-          ),
-          ListTile(
-            title: Text('Juegos Favoritos'),
-            onTap: () {
-              print('home');
-              print(userEmail);
-               Navigator.pushReplacementNamed(context, 'favoritos', arguments: {'game': gamesProvider.onDisplayGames, 'userEmail': userEmail});
-            },
-          ),
-        
-          // Agregar más opciones según sea necesario
-        ],
-      ),
-    );
+);
   }
 }
 

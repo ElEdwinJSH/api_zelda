@@ -14,6 +14,9 @@ class RegistroScreen extends StatefulWidget {
 }
 
 class _RegistroScreenState extends State<RegistroScreen> {
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,7 +173,7 @@ class _Registrar extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: RichText(
                 text: TextSpan(
-                  text: "¿Tienes cuenta?, da click en ",
+                  text: "¿Ya tienes cuenta?, da click en ",
                   style: const TextStyle(fontSize: 14,  color: Colors.black,
                     fontWeight: FontWeight.bold,),
                   children: <TextSpan>[

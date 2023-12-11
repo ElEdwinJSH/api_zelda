@@ -25,6 +25,7 @@ class _FavGameState extends State<FavGame> {
   @override
   void initState() {
     super.initState();
+    player.setReleaseMode(ReleaseMode.loop);
     playm('JuegosFavoritos.mp3');
   }
 
@@ -53,8 +54,9 @@ class _FavGameState extends State<FavGame> {
     print('fav');
     print(userEmail);
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 196, 194, 194),
       appBar: AppBar(
-        backgroundColor: Colors.green.shade700,
+        backgroundColor: const Color.fromARGB(255, 28, 82, 31),
         title: const Text('Juegos Favoritos'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -112,7 +114,11 @@ class _FavGameState extends State<FavGame> {
                     });
                   },
                   child: ListTile(
-                    title: Text(game.name),
+                    title: Text(
+                      (game.id == '5f6ce9d805615a85623ec2ce')
+                          ? 'The Legend of Zelda Tears of the Kingdom'
+                          : game.name,
+                    ),
                     leading: Image.asset(game.gameImage ?? ''),
                   ),
                 );

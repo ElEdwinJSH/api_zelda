@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:api_zelda/models/zelda_games.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
 class DetailsScreen extends StatefulWidget {//-------------------------------------------------
 
@@ -81,20 +82,21 @@ final Games game = args['game'];
     playm('${game.id}.mp3');
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: const Color.fromARGB(255, 15, 15, 15),
       appBar: AppBar(
-          backgroundColor: Colors.green.shade800,
-          title: Text(
+          backgroundColor: Color.fromARGB(255, 24, 94, 28),
+          title: Center(child: Text(
             (game.id == '5f6ce9d805615a85623ec2ce')
                 ? 'The Legend of Zelda Tears of the Kingdom'
                 : game.name,
-                
-            style: TextStyle(fontSize: 15),
+                 style: TextStyle(fontSize: 15),
+                ),
+           
           ),actions: [
           IconButton(
             icon: Icon(
               isFavorite==true ? Icons.favorite : Icons.favorite_border,
-              color: Colors.red,
+              color: Color.fromARGB(255, 168, 24, 24),
               size: 30,
             ),
             onPressed: () {
@@ -119,7 +121,7 @@ final Games game = args['game'];
                 child: Opacity(
                   opacity: isTextVisible ? 0.5 : 1.0,
                   child: Image(
-                    image: AssetImage(game.gameImage),
+                    image: AssetImage('assets/${game.id}.jpg'),
                     fit: BoxFit.fill,
                   ),
                 ),
@@ -220,7 +222,12 @@ class _Texto extends StatelessWidget {//----------------------------------------
             Text(
               (games.id == '5f6ce9d805615a85623ec2ce')
                   ? 'Tears of the Kingdom retains the open-world action-adventure gameplay of Breath of the Wild (2017). As Link, players explore Hyrule and two new areas; the sky, which is littered with numerous floating islands, and the Depths, a vast underground area beneath Hyrule, to find weapons and resources and complete quests.'
+                 :   (games.id == '5f6ce9d805615a85623ec2be')
+                  ? 'The Legend Of Zelda: Twilight Princess brings you back to Hyrule, as you uncover the mystery behind its plunge into darkness. Link is ordered by the mayor to attend the Hyrule Summit. He sets off, oblivious to the dark fate that has descended upon the kingdom.' 
+                   :   (games.id == '5f6ce9d805615a85623ec2c5')
+                  ? 'Spirit Tracks continues its style of gameplay from Phantom Hourglass, in which players use the stylus to control Link and use weapons and items. The game is divided into an overworld, which Link traverses using the Spirit Tracks, and towns and dungeons which he travels by foot. ' 
                   : games.description,
+                  
               style: const TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 10),
