@@ -1,3 +1,4 @@
+import 'package:api_zelda/widgets/video_player.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -20,17 +21,19 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+
     player.setVolume(1.0);
     if (!isMusicPlayed) {
       playm('File_Select.mp3');
+
       isMusicPlayed = true;
     }
+    VideoWidget();
   }
 
   @override
   void dispose() {
     if (isRegister == true) {
-  
     } else {
       fadeMusica();
     }
@@ -40,24 +43,40 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(
-            child: Column(
+        body: Stack(
+      children: [
+        VideoWidget(),
+        SimpleDialog(
+          backgroundColor: Color.fromARGB(255, 32, 63, 97).withOpacity(0.4),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+          title: Center(child: Text(
+            'Bienvenido',
+            style: TextStyle(fontSize: 30,color: Colors.white),
+          ),),
           children: [
-            const SizedBox(
-              height: 5,
-            ),
-            Text('Bienvenido',style: TextStyle(fontSize: 30),),
-            const SizedBox(
-              height: 5,
-            ),
-            ChangeNotifierProvider(
-                create: (_) => LoginFormProvider(), child: _Login())
+            Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      ChangeNotifierProvider(
+                          create: (_) => LoginFormProvider(), child: _Login())
+                    ],
+                  )
+                ])),
           ],
-        ))
-      ])),
-    );
+        )
+      ],
+    ));
   }
 
   Future<void> playm(String path) async {
@@ -116,6 +135,13 @@ class _LoginState extends State<_Login> {
                 decoration: const InputDecoration(
                   hintText: 'user@example.com',
                   labelText: 'Correo electrónico',
+                  labelStyle: TextStyle(color: Colors.white70),
+                  hintStyle: TextStyle(color: Colors.white30),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                    errorStyle: TextStyle(color: Colors.orange),
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange)),
+                  focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange))
                 ),
                 onChanged: (value) => loginForm.email = value,
                 validator: (value) {
@@ -138,6 +164,13 @@ class _LoginState extends State<_Login> {
                 decoration: const InputDecoration(
                   hintText: '***',
                   labelText: 'Contraseña',
+                   labelStyle: TextStyle(color: Colors.white70),
+                  hintStyle: TextStyle(color: Colors.white30),
+                  errorStyle: TextStyle(color: Colors.orange),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange)),
+                  focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.orange))
                 ),
                 onChanged: (value) => loginForm.password = value,
                 validator: (value) {
@@ -171,7 +204,8 @@ class _LoginState extends State<_Login> {
                           //cambia el estado de musica
                         });
 
-                        Navigator.pushReplacementNamed(context, 'home',arguments:{'email': loginForm.email});
+                        Navigator.pushReplacementNamed(context, 'home',
+                            arguments: {'email': loginForm.email});
                       } else {
                         // TODO: mostrar error en pantalla
                         // print( errorMessage );
@@ -192,25 +226,23 @@ class _LoginState extends State<_Login> {
               padding: const EdgeInsets.all(16.0),
               child: RichText(
                 text: TextSpan(
-                  text: "¿No tienes una cuenta?, da click en ",
-                  style: const TextStyle(fontSize: 15, color: Colors.black),
+                  text: "¿Sin cuenta?, da click en ",
+                  style: const TextStyle(fontSize: 14, color: Colors.black,  fontWeight: FontWeight.bold,),
                   children: <TextSpan>[
                     TextSpan(
                         text: "registrar",
                         style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.blue,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 53, 182, 143),
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                           
-                              isRegister = true; //cambia el estado de musica
-  
+                            isRegister = true; //cambia el estado de musica
+
                             Navigator.pushNamed(context, 'register').then((_) {
-
-                            isRegister = false;
-
+                              isRegister = false;
                             });
                           }),
                   ],
