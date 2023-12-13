@@ -7,7 +7,6 @@ class VideoWidget extends StatefulWidget {
   @override
   State<VideoWidget> createState() => _VideoWidgetState();
 }
-
 class _VideoWidgetState extends State<VideoWidget> {
   late final VideoPlayerController videocontroller;
 
@@ -25,11 +24,6 @@ class _VideoWidgetState extends State<VideoWidget> {
         videocontroller.setLooping(true);
       });
   });
-
-
-
-
-    
     videocontroller = VideoPlayerController.asset('assets/login.mp4')
       ..initialize().then((_) {
         videocontroller.play();

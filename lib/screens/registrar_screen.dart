@@ -14,9 +14,6 @@ class RegistroScreen extends StatefulWidget {
 }
 
 class _RegistroScreenState extends State<RegistroScreen> {
-
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +21,7 @@ class _RegistroScreenState extends State<RegistroScreen> {
       children: [
         VideoWidget(),
         SimpleDialog(
-           backgroundColor: Color.fromARGB(255, 32, 63, 97).withOpacity(0.4),
+          backgroundColor: Color.fromARGB(255, 32, 63, 97).withOpacity(0.4),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
@@ -42,8 +39,6 @@ class _RegistroScreenState extends State<RegistroScreen> {
                     Container(
                       child: Column(
                         children: [
-                         
-                      
                           ChangeNotifierProvider(
                               create: (_) => LoginFormProvider(),
                               child: const _Registrar())
@@ -82,18 +77,19 @@ class _Registrar extends StatelessWidget {
                 decoration: const InputDecoration(
                   hintText: 'user@example.com',
                   labelText: 'Correo electrónico',
-                   labelStyle: TextStyle(color: Colors.white70),
-                    hintStyle: TextStyle(color: Colors.white30),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    errorStyle: TextStyle(color: Colors.orange),
-                    border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange)),
-                    focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange)),
+                  labelStyle: TextStyle(color: Colors.white70),
+                  hintStyle: TextStyle(color: Colors.white30),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                  errorStyle: TextStyle(color: Colors.orange),
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                  errorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange)),
+                  focusedErrorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange)),
                 ),
+                style: TextStyle(color: Colors.white),
                 onChanged: (value) => loginForm.email = value,
                 validator: (value) {
                   String pattern =
@@ -115,17 +111,17 @@ class _Registrar extends StatelessWidget {
                 decoration: const InputDecoration(
                   hintText: '*****',
                   labelText: 'Contraseña',
-                   labelStyle: TextStyle(color: Colors.white70),
-                    hintStyle: TextStyle(color: Colors.white30),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    errorStyle: TextStyle(color: Colors.orange),
-                    border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    errorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange)),
-                    focusedErrorBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.orange)),
+                  labelStyle: TextStyle(color: Colors.white70),
+                  hintStyle: TextStyle(color: Colors.white30),
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                  errorStyle: TextStyle(color: Colors.orange),
+                  border: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white)),
+                  errorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange)),
+                  focusedErrorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.orange)),
                 ),
                 onChanged: (value) => loginForm.password = value,
                 validator: (value) {
@@ -174,8 +170,11 @@ class _Registrar extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   text: "¿Ya tienes cuenta?, da click en ",
-                  style: const TextStyle(fontSize: 14,  color: Colors.black,
-                    fontWeight: FontWeight.bold,),
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                   children: <TextSpan>[
                     TextSpan(
                         text: "Logear",

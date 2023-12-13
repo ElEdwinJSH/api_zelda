@@ -46,13 +46,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         body: Stack(
       children: [
-        VideoWidget(),
+        const VideoWidget(),
         SimpleDialog(
           backgroundColor: Color.fromARGB(255, 32, 63, 97).withOpacity(0.4),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-          title: Center(
+          title: const Center(
             child: Text(
               'Bienvenido',
               style: TextStyle(fontSize: 30, color: Colors.white),
